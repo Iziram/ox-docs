@@ -1,0 +1,64 @@
+---
+title: Theming
+description: Customize colors, borders, and gaps
+---
+
+## Colors
+
+Define a color palette in your config for easy customization:
+
+```lua
+local colors = {
+    fg = "#bbbbbb",
+    bg = "#1a1b26",
+    red = "#f7768e",
+    cyan = "#0db9d7",
+    green = "#9ece6a",
+    blue = "#6dade3",
+    purple = "#ad8ee6",
+}
+```
+
+## Borders
+
+Configure window borders:
+
+```lua
+-- Border width in pixels
+oxwm.border.set_width(2)
+
+-- Focused window border color
+oxwm.border.set_focused_color(colors.blue)
+
+-- Unfocused window border color
+oxwm.border.set_unfocused_color(colors.fg)
+```
+
+## Gaps
+
+Configure spacing between windows:
+
+```lua
+-- Inner gaps (between windows)
+oxwm.gaps.set_inner(5, 5)  -- horizontal, vertical
+
+-- Outer gaps (between windows and screen edge)
+oxwm.gaps.set_outer(5, 5)
+
+-- Smart gaps: no gaps when only one window
+oxwm.gaps.set_smart(true)
+```
+
+Toggle gaps at runtime with `Super+A`.
+
+## Layout Symbols
+
+Customize the symbols shown in the status bar for each layout:
+
+```lua
+oxwm.set_layout_symbol("tiling", "[T]")
+oxwm.set_layout_symbol("normie", "[F]")
+oxwm.set_layout_symbol("tabbed", "[=]")
+oxwm.set_layout_symbol("grid", "[G]")
+oxwm.set_layout_symbol("monocle", "[M]")
+```

@@ -1,0 +1,77 @@
+---
+title: Key Bindings
+description: Default keybindings and how to customize them
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Default keybindings (fully customizable in `~/.config/oxwm/config.lua`):
+
+## Window Management
+
+| Binding | Action |
+|---------|--------|
+| `Super+Return` | Spawn terminal |
+| `Super+Q` | Kill focused window |
+| `Super+J/K` | Cycle focus through stack |
+| `Super+Shift+F` | Toggle fullscreen |
+| `Super+Shift+Space` | Toggle floating |
+
+## Layouts
+
+| Binding | Action |
+|---------|--------|
+| `Super+F` | Set normie (floating) layout |
+| `Super+C` | Set tiling layout |
+| `Super+N` | Cycle layouts |
+| `Super+[/]` | Decrease/increase master area |
+| `Super+I/P` | Inc/dec number of master windows |
+
+## Tags
+
+| Binding | Action |
+|---------|--------|
+| `Super+1-9` | View tag 1-9 |
+| `Super+Shift+1-9` | Move window to tag 1-9 |
+| `Super+Ctrl+1-9` | Toggle tag view (multi-tag) |
+| `Super+Ctrl+Shift+1-9` | Toggle window tag (sticky) |
+
+## Multi-Monitor
+
+| Binding | Action |
+|---------|--------|
+| `Super+Comma/Period` | Focus prev/next monitor |
+| `Super+Shift+Comma/Period` | Send window to prev/next monitor |
+
+## System
+
+| Binding | Action |
+|---------|--------|
+| `Super+Shift+Q` | Quit WM |
+| `Super+Shift+R` | Hot reload config |
+| `Super+D` | dmenu launcher |
+| `Super+S` | Screenshot (maim) |
+| `Super+A` | Toggle gaps |
+| `Super+Shift+/` | Show keybinds overlay |
+
+## Mouse
+
+| Binding | Action |
+|---------|--------|
+| `Super+Button1` (drag) | Move window (floating) |
+| `Super+Button3` (drag) | Resize window (floating) |
+
+## Keychords
+
+OXWM supports multi-key sequences (Emacs/Vim style). Example: `Mod+Space` then `T` to spawn terminal.
+
+```lua
+oxwm.key.chord({ "Mod4" }, "space", {
+    { {}, "t", oxwm.spawn("st") },
+    { {}, "b", oxwm.spawn("firefox") },
+})
+```
+
+<Callout type="info">
+All keybindings can be customized in your `config.lua`. See the [Configuration](/docs/configuration) page for details.
+</Callout>

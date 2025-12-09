@@ -1,0 +1,61 @@
+---
+title: Quick Start
+description: Get up and running with OXWM in minutes
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+Now that you have OXWM installed, let's get your environment set up.
+
+## First Launch
+
+<Steps>
+<Step>
+**Start OXWM**
+
+If using startx, add to your `~/.xinitrc`:
+
+```sh
+exec oxwm
+```
+
+Then run `startx`. If using a display manager, select OXWM from the session list.
+
+</Step>
+<Step>
+**Config is auto-generated**
+
+On first launch, OXWM creates a default config at `~/.config/oxwm/config.lua`.
+
+</Step>
+<Step>
+**Open a terminal**
+
+Press `Super+Return` to spawn your terminal.
+
+</Step>
+</Steps>
+
+## Essential Keybindings
+
+| Binding | Action |
+|---------|--------|
+| `Super+Return` | Open terminal |
+| `Super+D` | Open dmenu |
+| `Super+Q` | Kill focused window |
+| `Super+Shift+Q` | Quit OXWM |
+| `Super+Shift+R` | Reload config |
+| `Super+1-9` | Switch to tag 1-9 |
+| `Super+Shift+1-9` | Move window to tag 1-9 |
+| `Super+J/K` | Focus next/previous window |
+
+<Callout type="info">
+All keybindings can be customized in your `config.lua`. Press `Super+Shift+/` to show the keybind overlay.
+</Callout>
+
+## Next Steps
+
+- [Configuration Basics](/docs/configuration/basics) - Learn the Lua config system
+- [Theming](/docs/appearance/theming) - Customize colors and borders
+- [Layouts](/docs/window-management/layouts) - Master tiling layouts

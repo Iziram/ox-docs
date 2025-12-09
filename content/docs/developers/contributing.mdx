@@ -1,0 +1,98 @@
+---
+title: How to Contribute
+description: Guidelines for contributing to OXWM
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+## Getting Started
+
+1. Fork the repository on GitHub
+2. Clone your fork locally
+3. Set up the development environment
+
+```sh
+git clone https://github.com/yourusername/oxwm
+cd oxwm
+```
+
+### Development with Nix
+
+If you're on NixOS or have Nix installed:
+
+```sh
+nix develop
+cargo build
+```
+
+### Manual Setup
+
+Install dependencies:
+
+```sh
+# Arch
+sudo pacman -S rust cargo libx11 libxft freetype2 fontconfig pkg-config
+
+# Build
+cargo build
+```
+
+## Testing Changes
+
+Use Xephyr to test OXWM without affecting your current session:
+
+```sh
+just test
+```
+
+Or manually:
+
+```sh
+Xephyr -screen 1280x800 :1 &
+DISPLAY=:1 cargo run
+```
+
+## Guidelines
+
+<Callout type="warning">
+Never commit your personal `~/.config/oxwm/config.lua`
+</Callout>
+
+- Only modify `templates/config.lua` if adding new configuration options
+- Test your changes with `just test` using Xephyr
+- Document any new features or keybindings
+- Update `templates/oxwm.lua` if adding new API functions
+
+## Project Structure
+
+```
+src/
+├── bin/main.rs          # Entry point
+├── window_manager.rs    # Core X11 event handling
+├── config/              # Lua config system
+├── bar/                 # Status bar
+├── keyboard/            # Keybindings
+├── layout/              # Window layouts
+└── errors.rs            # Error types
+
+templates/
+├── config.lua           # Default config
+└── oxwm.lua             # LSP type definitions
+```
+
+## Pull Requests
+
+1. Create a branch for your feature/fix
+2. Make your changes
+3. Test thoroughly with Xephyr
+4. Submit a PR with a clear description
+
+## Reporting Issues
+
+When reporting bugs, include:
+
+- OXWM version
+- Linux distribution
+- Steps to reproduce
+- Expected vs actual behavior
+- Relevant log output

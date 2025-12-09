@@ -1,0 +1,84 @@
+---
+title: Basic Configuration
+description: Configure OXWM using the Lua API
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+OXWM uses a clean, functional Lua API for configuration. On first run, a default config is automatically created at `~/.config/oxwm/config.lua`.
+
+## Quick Example
+
+Here's what the functional API looks like:
+
+```lua
+-- Set basic options
+oxwm.set_terminal("st")
+oxwm.set_modkey("Mod4")
+oxwm.set_tags({ "1", "2", "3", "4", "5", "6", "7", "8", "9" })
+
+-- Configure borders
+oxwm.border.set_width(2)
+oxwm.border.set_focused_color("#6dade3")
+oxwm.border.set_unfocused_color("#bbbbbb")
+
+-- Configure gaps
+oxwm.gaps.set_enabled(true)
+oxwm.gaps.set_inner(5, 5)  -- horizontal, vertical
+oxwm.gaps.set_outer(5, 5)
+
+-- Set up keybindings
+oxwm.key.bind({ "Mod4" }, "Return", oxwm.spawn("st"))
+oxwm.key.bind({ "Mod4" }, "Q", oxwm.client.kill())
+oxwm.key.bind({ "Mod4", "Shift" }, "Q", oxwm.quit())
+
+-- Add status bar blocks
+oxwm.bar.set_blocks({
+    oxwm.bar.block.datetime({
+        format = "{}",
+        date_format = "%H:%M",
+        interval = 60,
+        color = "#0db9d7",
+        underline = true,
+    }),
+    oxwm.bar.block.ram({
+        format = "RAM: {used}/{total} GB",
+        interval = 5,
+        color = "#7aa2f7",
+        underline = true,
+    }),
+})
+```
+
+## Features
+
+- **Hot-reload** - Changes take effect immediately with `Mod+Shift+R` (no X restart needed)
+- **LSP Support** - Full autocomplete and type hints for the API (`oxwm.lua` definitions included)
+- **Functional API** - Clean, discoverable functions instead of nested tables
+- **No compilation** - Edit and reload instantly
+
+## Key Configuration Areas
+
+Edit `~/.config/oxwm/config.lua` to customize:
+
+- Basic settings (terminal, modkey, tags)
+- Borders and colors
+- Window gaps
+- Status bar (font, blocks, color schemes)
+- Keybindings and keychords
+- Layout symbols
+- Autostart commands
+
+<Callout type="info">
+After making changes, reload OXWM with `Mod+Shift+R`
+</Callout>
+
+## Creating Your Config
+
+Generate the default config:
+
+```sh
+oxwm --init
+```
+
+Or just start OXWM - it will create one automatically on first run.

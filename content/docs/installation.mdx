@@ -1,0 +1,135 @@
+---
+title: Installation
+description: Install OXWM on NixOS, Arch Linux, or build from source
+---
+
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { Callout } from 'fumadocs-ui/components/callout';
+
+<Tabs items={["Arch Linux", "NixOS", "Manual Build"]}>
+<Tab value="Arch Linux">
+
+OXWM is available in the **Arch User Repository (AUR)**.
+
+You can install it using an AUR helper like `yay` or `paru`:
+
+```sh
+yay -S oxwm-git
+```
+
+<Callout type="info">
+This package pulls the latest git version, ensuring you have the newest features and fixes.
+</Callout>
+
+### Manual installation
+
+Install dependencies first:
+
+```sh
+sudo pacman -S rust cargo libx11 libxft freetype2 fontconfig pkg-config
+```
+
+Then follow the Manual Build instructions.
+
+</Tab>
+<Tab value="NixOS">
+
+The repository provides a Flake with a NixOS module.
+
+**Example `flake.nix` configuration:**
+
+```nix
+{
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    oxwm = {
+      url = "github:tonybanters/oxwm";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
+
+  outputs = inputs@{ self, nixpkgs, oxwm, ... }: {
+    nixosConfigurations.hostname = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules = [
+        oxwm.nixosModules.default
+        {
+          services.xserver = {
+            enable = true;
+            windowManager.oxwm.enable = true;
+          };
+        }
+      ];
+    };
+  };
+}
+```
+
+After rebuilding with `sudo nixos-rebuild switch`, OXWM will be available in your display manager's session list.
+
+</Tab>
+<Tab value="Manual Build">
+
+If your distribution isn't listed, you can build OXWM from source.
+
+<Steps>
+<Step>
+**Install dependencies**
+
+You'll need Rust, Cargo, and X11 development libraries:
+- `libx11`, `libxft`, `freetype2`, `fontconfig`, `pkg-config`
+
+</Step>
+<Step>
+**Clone and build**
+
+```sh
+git clone https://github.com/tonybanters/oxwm
+cd oxwm
+cargo build --release
+```
+
+</Step>
+<Step>
+**Install**
+
+```sh
+sudo cp target/release/oxwm /usr/local/bin/
+```
+
+Or use the justfile:
+
+```sh
+just install
+```
+
+</Step>
+</Steps>
+
+</Tab>
+</Tabs>
+
+## Setting up OXWM
+
+### Without a display manager (startx)
+
+Add the following to your `~/.xinitrc`:
+
+```sh
+exec oxwm
+```
+
+Then start X with:
+
+```sh
+startx
+```
+
+### With a display manager
+
+If using a display manager (LightDM, GDM, SDDM), OXWM should appear in the session list after installation.
+
+### First launch
+
+On first launch, your initial config file will be automatically created at `~/.config/oxwm/config.lua`. Edit it and reload with `Mod+Shift+R`.

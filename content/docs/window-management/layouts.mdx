@@ -1,0 +1,87 @@
+---
+title: Layouts
+description: Available window layouts and how to use them
+---
+
+OXWM supports multiple window layouts that can be cycled or set directly.
+
+## Available Layouts
+
+### Tiling
+
+The default layout. Windows are arranged with a master area on the left and a stack on the right.
+
+- Master window takes the left portion of the screen
+- Stack windows split the right portion vertically
+- Adjust master width with `Super+H/L`
+- Adjust number of masters with `Super+I/P`
+
+```lua
+oxwm.key.bind({ "Mod4" }, "C", oxwm.layout.set("tiling"))
+```
+
+### Normie (Floating)
+
+All windows float by default. Move and resize freely with the mouse.
+
+```lua
+oxwm.key.bind({ "Mod4" }, "F", oxwm.layout.set("normie"))
+```
+
+### Monocle
+
+Fullscreen stacking - one window visible at a time, filling the screen.
+
+```lua
+oxwm.key.bind({ "Mod4" }, "M", oxwm.layout.set("monocle"))
+```
+
+### Grid
+
+Windows arranged in an equal-sized grid.
+
+```lua
+oxwm.key.bind({ "Mod4" }, "G", oxwm.layout.set("grid"))
+```
+
+### Tabbed
+
+Windows in a tabbed container - tabs shown at the top.
+
+```lua
+oxwm.key.bind({ "Mod4" }, "T", oxwm.layout.set("tabbed"))
+```
+
+## Cycling Layouts
+
+Cycle through all available layouts:
+
+```lua
+oxwm.key.bind({ "Mod4" }, "N", oxwm.layout.cycle())
+```
+
+## Master Area Controls
+
+For the tiling layout:
+
+```lua
+-- Adjust master area width
+oxwm.key.bind({ "Mod4" }, "H", oxwm.set_master_factor(-5))
+oxwm.key.bind({ "Mod4" }, "L", oxwm.set_master_factor(5))
+
+-- Adjust number of master windows
+oxwm.key.bind({ "Mod4" }, "I", oxwm.inc_num_master(1))
+oxwm.key.bind({ "Mod4" }, "P", oxwm.inc_num_master(-1))
+```
+
+## Layout Symbols
+
+Customize how layouts appear in the status bar:
+
+```lua
+oxwm.set_layout_symbol("tiling", "[T]")
+oxwm.set_layout_symbol("normie", "[F]")
+oxwm.set_layout_symbol("monocle", "[M]")
+oxwm.set_layout_symbol("grid", "[G]")
+oxwm.set_layout_symbol("tabbed", "[=]")
+```

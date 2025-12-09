@@ -1,0 +1,29 @@
+---
+title: Mouse & Gestures
+description: Mouse bindings for window management
+---
+
+## Mouse Bindings
+
+OXWM uses the modifier key (set with `oxwm.set_modkey()`) for mouse actions.
+
+| Binding | Action |
+|---------|--------|
+| `Super+Button1` (drag) | Move window |
+| `Super+Button3` (drag) | Resize window |
+
+## Setting the Modifier
+
+```lua
+oxwm.set_modkey("Mod4")  -- Super/Windows key
+-- or
+oxwm.set_modkey("Mod1")  -- Alt key
+```
+
+## Focus Follows Mouse
+
+By default, OXWM uses focus-follows-mouse: hovering over a window focuses it.
+
+## Tag Clicking
+
+Click on tags in the status bar to switch to that tag.

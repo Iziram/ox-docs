@@ -1,0 +1,795 @@
+---
+title: API Reference
+description: Complete Lua API reference for OXWM
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Complete reference for the OXWM Lua configuration API.
+
+<Callout type="info">
+Colors can be specified as hex strings (`"#ff0000"`, `"0xff0000"`) or integers.
+</Callout>
+
+## Global Functions
+
+### oxwm.spawn
+
+Spawn a command.
+
+```lua
+oxwm.spawn(cmd)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `cmd` | `string \| string[]` | Command to spawn (string or array of strings) |
+
+**Returns:** Action table for keybinding
+
+```lua
+oxwm.key.bind({ "Mod4" }, "D", oxwm.spawn("dmenu_run"))
+oxwm.key.bind({ "Mod4" }, "B", oxwm.spawn({ "sh", "-c", "firefox" }))
+```
+
+### oxwm.spawn_terminal
+
+Spawn the configured terminal emulator.
+
+```lua
+oxwm.spawn_terminal()
+```
+
+**Returns:** Action table for keybinding
+
+### oxwm.set_terminal
+
+Set the terminal emulator.
+
+```lua
+oxwm.set_terminal(terminal)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `terminal` | `string` | Terminal command (e.g., `"st"`, `"alacritty"`) |
+
+### oxwm.set_modkey
+
+Set the modifier key (used for mouse bindings like drag/resize).
+
+```lua
+oxwm.set_modkey(modkey)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `modkey` | `string` | Modifier key (`"Mod1"`, `"Mod4"`, `"Shift"`, `"Control"`) |
+
+### oxwm.set_tags
+
+Set workspace tags.
+
+```lua
+oxwm.set_tags(tags)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `tags` | `string[]` | Array of tag names |
+
+```lua
+oxwm.set_tags({ "1", "2", "3", "4", "5", "6", "7", "8", "9" })
+-- Or with icons (requires Nerd Font)
+oxwm.set_tags({ "", "󰊯", "", "", "󰙯" })
+```
+
+### oxwm.set_layout_symbol
+
+Set custom symbol for a layout (displayed in status bar).
+
+```lua
+oxwm.set_layout_symbol(name, symbol)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `name` | `string` | Layout name (`"tiling"`, `"normie"`, `"tabbed"`, `"grid"`, `"monocle"`) |
+| `symbol` | `string` | Symbol to display (e.g., `"[T]"`, `"[F]"`) |
+
+### oxwm.quit
+
+Quit the window manager.
+
+```lua
+oxwm.quit()
+```
+
+**Returns:** Action table for keybinding
+
+### oxwm.restart
+
+Restart the window manager (hot reload).
+
+```lua
+oxwm.restart()
+```
+
+**Returns:** Action table for keybinding
+
+### oxwm.recompile
+
+Recompile the window manager.
+
+```lua
+oxwm.recompile()
+```
+
+**Returns:** Action table for keybinding
+
+### oxwm.toggle_gaps
+
+Toggle gaps on/off.
+
+```lua
+oxwm.toggle_gaps()
+```
+
+**Returns:** Action table for keybinding
+
+### oxwm.show_keybinds
+
+Show keybind overlay on screen.
+
+```lua
+oxwm.show_keybinds()
+```
+
+**Returns:** Action table for keybinding
+
+### oxwm.set_master_factor
+
+Adjust master area width in tiling layout.
+
+```lua
+oxwm.set_master_factor(delta)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `delta` | `integer` | Delta to adjust by (negative to decrease, positive to increase) |
+
+**Returns:** Action table for keybinding
+
+### oxwm.inc_num_master
+
+Increment/decrement number of master windows.
+
+```lua
+oxwm.inc_num_master(delta)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `delta` | `integer` | Delta to adjust by (negative to decrease, positive to increase) |
+
+**Returns:** Action table for keybinding
+
+### oxwm.autostart
+
+Add an autostart command (runs once when OXWM starts).
+
+```lua
+oxwm.autostart(cmd)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `cmd` | `string` | Command to run at startup |
+
+```lua
+oxwm.autostart("picom")
+oxwm.autostart("feh --bg-scale ~/wallpaper.jpg")
+```
+
+---
+
+## oxwm.key
+
+Keybinding module.
+
+### oxwm.key.bind
+
+Bind a key combination to an action.
+
+```lua
+oxwm.key.bind(modifiers, key, action)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `modifiers` | `string \| string[]` | Modifier keys (e.g., `{"Mod4"}`, `{"Mod4", "Shift"}`) |
+| `key` | `string` | Key name (e.g., `"Return"`, `"Q"`, `"1"`) |
+| `action` | `table` | Action returned by oxwm functions |
+
+```lua
+oxwm.key.bind({ "Mod4" }, "Return", oxwm.spawn_terminal())
+oxwm.key.bind({ "Mod4", "Shift" }, "Q", oxwm.quit())
+```
+
+### oxwm.key.chord
+
+Bind a keychord (multi-key sequence) to an action.
+
+```lua
+oxwm.key.chord(keys, action)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `keys` | `table[]` | Array of key presses, each: `{{modifiers}, key}` |
+| `action` | `table` | Action returned by oxwm functions |
+
+```lua
+-- Press Mod4+Space, then T to spawn terminal
+oxwm.key.chord({
+    { { "Mod4" }, "Space" },
+    { {}, "T" }
+}, oxwm.spawn_terminal())
+```
+
+---
+
+## oxwm.gaps
+
+Gap configuration module.
+
+### oxwm.gaps.set_enabled
+
+Set gaps enabled/disabled.
+
+```lua
+oxwm.gaps.set_enabled(enabled)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `enabled` | `boolean` | Enable or disable gaps |
+
+### oxwm.gaps.enable
+
+Enable gaps.
+
+```lua
+oxwm.gaps.enable()
+```
+
+### oxwm.gaps.disable
+
+Disable gaps.
+
+```lua
+oxwm.gaps.disable()
+```
+
+### oxwm.gaps.set_inner
+
+Set inner gaps (between windows).
+
+```lua
+oxwm.gaps.set_inner(horizontal, vertical)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `horizontal` | `integer` | Horizontal inner gap in pixels |
+| `vertical` | `integer` | Vertical inner gap in pixels |
+
+### oxwm.gaps.set_outer
+
+Set outer gaps (between windows and screen edge).
+
+```lua
+oxwm.gaps.set_outer(horizontal, vertical)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `horizontal` | `integer` | Horizontal outer gap in pixels |
+| `vertical` | `integer` | Vertical outer gap in pixels |
+
+### oxwm.gaps.set_smart
+
+Set smart gaps (disable outer gaps when only one window visible).
+
+```lua
+oxwm.gaps.set_smart(enabled)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `enabled` | `boolean` | Enable or disable smart gaps |
+
+---
+
+## oxwm.border
+
+Border configuration module.
+
+### oxwm.border.set_width
+
+Set border width.
+
+```lua
+oxwm.border.set_width(width)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `width` | `integer` | Border width in pixels |
+
+### oxwm.border.set_focused_color
+
+Set focused window border color.
+
+```lua
+oxwm.border.set_focused_color(color)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `color` | `string \| integer` | Color as hex string or integer |
+
+### oxwm.border.set_unfocused_color
+
+Set unfocused window border color.
+
+```lua
+oxwm.border.set_unfocused_color(color)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `color` | `string \| integer` | Color as hex string or integer |
+
+---
+
+## oxwm.client
+
+Client/window management module.
+
+### oxwm.client.kill
+
+Kill the focused window.
+
+```lua
+oxwm.client.kill()
+```
+
+**Returns:** Action table for keybinding
+
+### oxwm.client.toggle_fullscreen
+
+Toggle fullscreen mode.
+
+```lua
+oxwm.client.toggle_fullscreen()
+```
+
+**Returns:** Action table for keybinding
+
+### oxwm.client.toggle_floating
+
+Toggle floating mode.
+
+```lua
+oxwm.client.toggle_floating()
+```
+
+**Returns:** Action table for keybinding
+
+### oxwm.client.focus_stack
+
+Focus next/previous window in stack.
+
+```lua
+oxwm.client.focus_stack(dir)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `dir` | `integer` | Direction (`1` for next, `-1` for previous) |
+
+**Returns:** Action table for keybinding
+
+### oxwm.client.move_stack
+
+Move window in stack (swap position).
+
+```lua
+oxwm.client.move_stack(dir)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `dir` | `integer` | Direction (`1` for next, `-1` for previous) |
+
+**Returns:** Action table for keybinding
+
+---
+
+## oxwm.monitor
+
+Monitor management module.
+
+### oxwm.monitor.focus
+
+Focus monitor.
+
+```lua
+oxwm.monitor.focus(dir)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `dir` | `integer` | Direction (`-1` for previous, `1` for next) |
+
+**Returns:** Action table for keybinding
+
+### oxwm.monitor.tag
+
+Send focused window to monitor.
+
+```lua
+oxwm.monitor.tag(dir)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `dir` | `integer` | Direction (`-1` for previous, `1` for next) |
+
+**Returns:** Action table for keybinding
+
+---
+
+## oxwm.layout
+
+Layout management module.
+
+### oxwm.layout.cycle
+
+Cycle through layouts.
+
+```lua
+oxwm.layout.cycle()
+```
+
+**Returns:** Action table for keybinding
+
+### oxwm.layout.set
+
+Set specific layout.
+
+```lua
+oxwm.layout.set(name)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `name` | `string` | Layout name (`"tiling"`, `"normie"`, `"tabbed"`, `"grid"`, `"monocle"`) |
+
+**Returns:** Action table for keybinding
+
+---
+
+## oxwm.tag
+
+Tag/workspace management module.
+
+<Callout type="info">
+Tags are 0-indexed, so tag "1" is index 0.
+</Callout>
+
+### oxwm.tag.view
+
+View/switch to tag.
+
+```lua
+oxwm.tag.view(index)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `index` | `integer` | Tag index (0-based) |
+
+**Returns:** Action table for keybinding
+
+### oxwm.tag.move_to
+
+Move focused window to tag.
+
+```lua
+oxwm.tag.move_to(index)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `index` | `integer` | Tag index (0-based) |
+
+**Returns:** Action table for keybinding
+
+### oxwm.tag.toggleview
+
+Toggle viewing a tag (allows viewing multiple tags at once).
+
+```lua
+oxwm.tag.toggleview(index)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `index` | `integer` | Tag index (0-based) |
+
+**Returns:** Action table for keybinding
+
+### oxwm.tag.toggletag
+
+Toggle tag on focused window (allows window to appear on multiple tags).
+
+```lua
+oxwm.tag.toggletag(index)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `index` | `integer` | Tag index (0-based) |
+
+**Returns:** Action table for keybinding
+
+---
+
+## oxwm.rule
+
+Window rule module.
+
+### oxwm.rule.add
+
+Add a window rule.
+
+```lua
+oxwm.rule.add(rule)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `rule` | `table` | Rule configuration (see below) |
+
+**Rule properties:**
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `class` | `string?` | Window class to match |
+| `instance` | `string?` | Window instance to match |
+| `title` | `string?` | Window title to match |
+| `role` | `string?` | Window role to match |
+| `floating` | `boolean?` | Force floating mode |
+| `tag` | `integer?` | Send to specific tag |
+| `fullscreen` | `boolean?` | Force fullscreen mode |
+
+```lua
+oxwm.rule.add({ instance = "gimp", floating = true })
+oxwm.rule.add({ class = "firefox", title = "Library", floating = true })
+oxwm.rule.add({ class = "Spotify", tag = 8 })
+```
+
+<Callout type="info">
+Use `xprop` and click on a window to find its class/instance. `WM_CLASS(STRING)` shows both instance and class.
+</Callout>
+
+---
+
+## oxwm.bar
+
+Status bar configuration module.
+
+### oxwm.bar.set_font
+
+Set status bar font.
+
+```lua
+oxwm.bar.set_font(font)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `font` | `string` | Font string (e.g., `"monospace:style=Bold:size=10"`) |
+
+### oxwm.bar.set_blocks
+
+Set status bar blocks.
+
+```lua
+oxwm.bar.set_blocks(blocks)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `blocks` | `table[]` | Array of block configurations created with `oxwm.bar.block.*` |
+
+### oxwm.bar.set_scheme_normal
+
+Set color scheme for unoccupied tags.
+
+```lua
+oxwm.bar.set_scheme_normal(foreground, background, underline)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `foreground` | `string \| integer` | Foreground color |
+| `background` | `string \| integer` | Background color |
+| `underline` | `string \| integer` | Underline color |
+
+### oxwm.bar.set_scheme_occupied
+
+Set color scheme for occupied tags (has windows).
+
+```lua
+oxwm.bar.set_scheme_occupied(foreground, background, underline)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `foreground` | `string \| integer` | Foreground color |
+| `background` | `string \| integer` | Background color |
+| `underline` | `string \| integer` | Underline color |
+
+### oxwm.bar.set_scheme_selected
+
+Set color scheme for selected tag.
+
+```lua
+oxwm.bar.set_scheme_selected(foreground, background, underline)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `foreground` | `string \| integer` | Foreground color |
+| `background` | `string \| integer` | Background color |
+| `underline` | `string \| integer` | Underline color |
+
+---
+
+## oxwm.bar.block
+
+Block constructors for status bar.
+
+### oxwm.bar.block.ram
+
+Create a RAM usage block.
+
+```lua
+oxwm.bar.block.ram(config)
+```
+
+| Config | Type | Description |
+|--------|------|-------------|
+| `format` | `string` | Format string with `{used}` and `{total}` placeholders |
+| `interval` | `integer` | Update interval in seconds |
+| `color` | `string \| integer` | Text color |
+| `underline` | `boolean` | Whether to underline the block |
+
+```lua
+oxwm.bar.block.ram({
+    format = "RAM: {used}/{total} GB",
+    interval = 5,
+    color = "#7aa2f7",
+    underline = true,
+})
+```
+
+### oxwm.bar.block.datetime
+
+Create a date/time block.
+
+```lua
+oxwm.bar.block.datetime(config)
+```
+
+| Config | Type | Description |
+|--------|------|-------------|
+| `format` | `string` | Display template with `{}` placeholder |
+| `date_format` | `string` | strftime format string |
+| `interval` | `integer` | Update interval in seconds |
+| `color` | `string \| integer` | Text color |
+| `underline` | `boolean` | Whether to underline the block |
+
+```lua
+oxwm.bar.block.datetime({
+    format = "{}",
+    date_format = "%a, %b %d - %-I:%M %P",
+    interval = 1,
+    color = "#0db9d7",
+    underline = true,
+})
+```
+
+### oxwm.bar.block.shell
+
+Create a shell command block.
+
+```lua
+oxwm.bar.block.shell(config)
+```
+
+| Config | Type | Description |
+|--------|------|-------------|
+| `format` | `string` | Format string with `{}` placeholder for command output |
+| `command` | `string` | Shell command to execute |
+| `interval` | `integer` | Update interval in seconds |
+| `color` | `string \| integer` | Text color |
+| `underline` | `boolean` | Whether to underline the block |
+
+```lua
+oxwm.bar.block.shell({
+    format = "{}",
+    command = "uname -r",
+    interval = 999999999,
+    color = "#f7768e",
+    underline = true,
+})
+```
+
+### oxwm.bar.block.static
+
+Create a static text block.
+
+```lua
+oxwm.bar.block.static(config)
+```
+
+| Config | Type | Description |
+|--------|------|-------------|
+| `text` | `string` | Static text to display |
+| `interval` | `integer` | Update interval (use high value for static) |
+| `color` | `string \| integer` | Text color |
+| `underline` | `boolean` | Whether to underline the block |
+
+```lua
+oxwm.bar.block.static({
+    text = " │ ",
+    interval = 999999999,
+    color = "#a9b1d6",
+    underline = false,
+})
+```
+
+### oxwm.bar.block.battery
+
+Create a battery status block.
+
+```lua
+oxwm.bar.block.battery(config)
+```
+
+| Config | Type | Description |
+|--------|------|-------------|
+| `format` | `string` | Default format with `{}` placeholder |
+| `charging` | `string` | Format when charging |
+| `discharging` | `string` | Format when discharging |
+| `full` | `string` | Format when full |
+| `interval` | `integer` | Update interval in seconds |
+| `color` | `string \| integer` | Text color |
+| `underline` | `boolean` | Whether to underline the block |
+
+```lua
+oxwm.bar.block.battery({
+    format = "Bat: {}%",
+    charging = "⚡ Bat: {}%",
+    discharging = "- Bat: {}%",
+    full = "✓ Bat: {}%",
+    interval = 30,
+    color = "#9ece6a",
+    underline = true,
+})
+```

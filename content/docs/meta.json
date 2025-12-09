@@ -1,0 +1,19 @@
+{
+  "title": "Documentation",
+  "pages": [
+    "index",
+    "installation",
+    "quick-start",
+    "---Configuration---",
+    "...configuration",
+    "---Appearance---",
+    "...appearance",
+    "---Window Management---",
+    "...window-management",
+    "---Bindings & Input---",
+    "...bindings",
+    "api-reference",
+    "---Developers---",
+    "...developers"
+  ]
+}

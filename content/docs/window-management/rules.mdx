@@ -1,0 +1,79 @@
+---
+title: Window Rules
+description: Automatically configure windows based on their properties
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Window rules let you automatically configure windows based on their class, instance, title, or role.
+
+## Adding Rules
+
+```lua
+oxwm.rule.add({
+    class = "firefox",
+    floating = true,
+})
+```
+
+## Rule Properties
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `class` | `string` | Match window class |
+| `instance` | `string` | Match window instance |
+| `title` | `string` | Match window title |
+| `role` | `string` | Match window role |
+| `floating` | `boolean` | Force floating mode |
+| `tag` | `integer` | Send to specific tag (0-indexed) |
+| `fullscreen` | `boolean` | Force fullscreen mode |
+
+## Examples
+
+### Force Floating
+
+```lua
+-- Float GIMP windows
+oxwm.rule.add({ instance = "gimp", floating = true })
+
+-- Float Firefox dialogs
+oxwm.rule.add({ class = "firefox", title = "Library", floating = true })
+
+-- Float mpv
+oxwm.rule.add({ instance = "mpv", floating = true })
+```
+
+### Send to Tag
+
+```lua
+-- Send Spotify to tag 9
+oxwm.rule.add({ class = "Spotify", tag = 8 })
+
+-- Send Discord to tag 8
+oxwm.rule.add({ class = "discord", tag = 7 })
+```
+
+### Combine Properties
+
+```lua
+oxwm.rule.add({
+    class = "Steam",
+    floating = true,
+    tag = 5,
+})
+```
+
+## Finding Window Properties
+
+<Callout type="info">
+Use `xprop` to find window properties. Run `xprop` in a terminal and click on a window.
+</Callout>
+
+Look for `WM_CLASS(STRING)` which shows both instance and class:
+
+```
+WM_CLASS(STRING) = "Navigator", "firefox"
+                    ^instance    ^class
+```
+
+The first value is the instance, the second is the class.
