@@ -9,11 +9,7 @@ import {
   TOTAL_DURATION,
 } from "./constants";
 
-interface TileLayoutProps {
-  orientation: "horizontal" | "vertical";
-}
-
-export function TileLayout({ orientation }: TileLayoutProps) {
+export function TileLayout() {
   const containerRef = useRef<HTMLDivElement>(null);
   const r1 = useRef<HTMLDivElement>(null);
   const r2 = useRef<HTMLDivElement>(null);
@@ -37,15 +33,10 @@ export function TileLayout({ orientation }: TileLayoutProps) {
       const height = containerRef.current.clientHeight;
       const gap = 16;
 
-      const h_halfW = (width - gap) / 2;
-      const h_halfH = (height - gap) / 2;
-      const h_rightX = h_halfW + gap;
-      const h_bottomY = h_halfH + gap;
-
-      const v_halfW = (width - gap) / 2;
-      const v_halfH = (height - gap) / 2;
-      const v_rightX = v_halfW + gap;
-      const v_bottomY = v_halfH + gap;
+      const halfW = (width - gap) / 2;
+      const halfH = (height - gap) / 2;
+      const rightX = halfW + gap;
+      const bottomY = halfH + gap;
 
       const set = (
         el: HTMLDivElement | null,
@@ -66,8 +57,6 @@ export function TileLayout({ orientation }: TileLayoutProps) {
         el.className = cn(CARD_BASE, active ? CARD_ACTIVE : CARD_INACTIVE);
       };
 
-      const isVert = orientation === "vertical";
-
       let activeWindows = 0;
       if (phase >= 1) activeWindows = 1;
       if (phase >= 2) activeWindows = 2;
@@ -85,34 +74,18 @@ export function TileLayout({ orientation }: TileLayoutProps) {
 
       let pos0, pos1, pos2;
 
-      if (isVert) {
-        if (activeWindows === 1) {
-          pos0 = { x: 0, y: 0, w: width, h: height };
-          pos1 = { x: 0, y: v_bottomY, w: width, h: v_halfH };
-          pos2 = { x: v_rightX, y: v_bottomY, w: v_halfW, h: v_halfH };
-        } else if (activeWindows === 2) {
-          pos0 = { x: 0, y: 0, w: width, h: v_halfH };
-          pos1 = { x: 0, y: v_bottomY, w: width, h: v_halfH };
-          pos2 = { x: v_rightX, y: v_bottomY, w: v_halfW, h: v_halfH };
-        } else {
-          pos0 = { x: 0, y: 0, w: width, h: v_halfH };
-          pos1 = { x: 0, y: v_bottomY, w: v_halfW, h: v_halfH };
-          pos2 = { x: v_rightX, y: v_bottomY, w: v_halfW, h: v_halfH };
-        }
+      if (activeWindows === 1) {
+        pos0 = { x: 0, y: 0, w: width, h: height };
+        pos1 = { x: rightX, y: 0, w: halfW, h: height };
+        pos2 = { x: rightX, y: bottomY, w: halfW, h: halfH };
+      } else if (activeWindows === 2) {
+        pos0 = { x: 0, y: 0, w: halfW, h: height };
+        pos1 = { x: rightX, y: 0, w: halfW, h: height };
+        pos2 = { x: rightX, y: bottomY, w: halfW, h: halfH };
       } else {
-        if (activeWindows === 1) {
-          pos0 = { x: 0, y: 0, w: width, h: height };
-          pos1 = { x: h_rightX, y: 0, w: h_halfW, h: height };
-          pos2 = { x: h_rightX, y: h_bottomY, w: h_halfW, h: h_halfH };
-        } else if (activeWindows === 2) {
-          pos0 = { x: 0, y: 0, w: h_halfW, h: height };
-          pos1 = { x: h_rightX, y: 0, w: h_halfW, h: height };
-          pos2 = { x: h_rightX, y: h_bottomY, w: h_halfW, h: h_halfH };
-        } else {
-          pos0 = { x: 0, y: 0, w: h_halfW, h: height };
-          pos1 = { x: h_rightX, y: 0, w: h_halfW, h: h_halfH };
-          pos2 = { x: h_rightX, y: h_bottomY, w: h_halfW, h: h_halfH };
-        }
+        pos0 = { x: 0, y: 0, w: halfW, h: height };
+        pos1 = { x: rightX, y: 0, w: halfW, h: halfH };
+        pos2 = { x: rightX, y: bottomY, w: halfW, h: halfH };
       }
 
       let target1 = pos0;
@@ -131,7 +104,7 @@ export function TileLayout({ orientation }: TileLayoutProps) {
     const ro = new ResizeObserver(update);
     ro.observe(containerRef.current as Element);
     return () => ro.disconnect();
-  }, [phase, orientation]);
+  }, [phase]);
 
   useEffect(() => {
     const timeouts = TIMINGS.map((t) => setTimeout(() => setPhase(t.phase), t.delay));

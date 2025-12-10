@@ -9,11 +9,7 @@ import {
   TOTAL_DURATION,
 } from "./constants";
 
-interface GridLayoutProps {
-  orientation: "horizontal" | "vertical";
-}
-
-export function GridLayout({ orientation }: GridLayoutProps) {
+export function GridLayout() {
   const containerRef = useRef<HTMLDivElement>(null);
   const r1 = useRef<HTMLDivElement>(null);
   const r2 = useRef<HTMLDivElement>(null);
@@ -72,74 +68,38 @@ export function GridLayout({ orientation }: GridLayoutProps) {
         }
 
         if (n === 2) {
-          if (orientation === "horizontal") {
-            const rowH = height * (1 - SINGLE_PAD_V * 2);
-            const startY = (height - rowH) / 2;
-            const w = (width - gap) / 2;
-            const h = rowH;
-            positions.push({ x: 0, y: startY, w, h });
-            positions.push({ x: w + gap, y: startY, w, h });
-          } else {
-            const colW = width * (1 - SINGLE_PAD_H * 2);
-            const startX = (width - colW) / 2;
-            const w = colW;
-            const h = (height - gap) / 2;
-            positions.push({ x: startX, y: 0, w, h });
-            positions.push({ x: startX, y: h + gap, w, h });
-          }
+          const rowH = height * (1 - SINGLE_PAD_V * 2);
+          const startY = (height - rowH) / 2;
+          const w = (width - gap) / 2;
+          const h = rowH;
+          positions.push({ x: 0, y: startY, w, h });
+          positions.push({ x: w + gap, y: startY, w, h });
           return positions;
         }
 
-        let cols = 1;
-        let rows = 1;
-
-        if (orientation === "horizontal") {
-          cols = Math.ceil(Math.sqrt(n));
-          rows = Math.ceil(n / cols);
-        } else {
-          rows = Math.ceil(Math.sqrt(n));
-          cols = Math.ceil(n / rows);
-        }
+        let cols = Math.ceil(Math.sqrt(n));
+        let rows = Math.ceil(n / cols);
 
         const totalGapW = Math.max(0, cols - 1) * gap;
         const totalGapH = Math.max(0, rows - 1) * gap;
         const cellW = (width - totalGapW) / cols;
         const cellH = (height - totalGapH) / rows;
 
-        if (orientation === "horizontal") {
-          const gridHeight = rows * cellH + (rows - 1) * gap;
-          const startY = (height - gridHeight) / 2;
-          for (let i = 0; i < n; i++) {
-            const row = Math.floor(i / cols);
-            const col = i % cols;
-            const isLastRow = row === rows - 1;
-            const itemsInThisRow = isLastRow ? n - row * cols : cols;
-            const rowWidth = itemsInThisRow * cellW + (itemsInThisRow - 1) * gap;
-            const rowStartX = (width - rowWidth) / 2;
-            positions.push({
-              x: rowStartX + col * (cellW + gap),
-              y: startY + row * (cellH + gap),
-              w: cellW,
-              h: cellH,
-            });
-          }
-        } else {
-          const gridWidth = cols * cellW + (cols - 1) * gap;
-          const startX = (width - gridWidth) / 2;
-          for (let i = 0; i < n; i++) {
-            const col = Math.floor(i / rows);
-            const row = i % rows;
-            const isLastCol = col === cols - 1;
-            const itemsInThisCol = isLastCol ? n - col * rows : rows;
-            const colHeight = itemsInThisCol * cellH + (itemsInThisCol - 1) * gap;
-            const colStartY = (height - colHeight) / 2;
-            positions.push({
-              x: startX + col * (cellW + gap),
-              y: colStartY + row * (cellH + gap),
-              w: cellW,
-              h: cellH,
-            });
-          }
+        const gridHeight = rows * cellH + (rows - 1) * gap;
+        const startY = (height - gridHeight) / 2;
+        for (let i = 0; i < n; i++) {
+          const row = Math.floor(i / cols);
+          const col = i % cols;
+          const isLastRow = row === rows - 1;
+          const itemsInThisRow = isLastRow ? n - row * cols : cols;
+          const rowWidth = itemsInThisRow * cellW + (itemsInThisRow - 1) * gap;
+          const rowStartX = (width - rowWidth) / 2;
+          positions.push({
+            x: rowStartX + col * (cellW + gap),
+            y: startY + row * (cellH + gap),
+            w: cellW,
+            h: cellH,
+          });
         }
         return positions;
       };
@@ -188,7 +148,7 @@ export function GridLayout({ orientation }: GridLayoutProps) {
     const ro = new ResizeObserver(update);
     ro.observe(containerRef.current as Element);
     return () => ro.disconnect();
-  }, [phase, orientation]);
+  }, [phase]);
 
   useEffect(() => {
     const timeouts = TIMINGS.map((t) => setTimeout(() => setPhase(t.phase), t.delay));

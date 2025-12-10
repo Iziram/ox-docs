@@ -6,20 +6,18 @@ import { TileLayout } from "@/components/layouts/tile-layout";
 import { MonocleLayout } from "@/components/layouts/monocle-layout";
 import { GridLayout } from "@/components/layouts/grid-layout";
 import { FloatingLayout } from "@/components/layouts/floating-layout";
+import { TabbedLayout } from "@/components/layouts/tabbed-layout";
 
-type LayoutType = "tiled" | "monocle" | "grid" | "floating";
+type LayoutType = "tiling" | "monocle" | "grid" | "normie" | "tabbed";
 
 export function OxwmLayouts() {
-  const [activeLayout, setActiveLayout] = useState<LayoutType>("tiled");
-  const [orientation, setOrientation] = useState<"horizontal" | "vertical">("horizontal");
+  const [activeLayout, setActiveLayout] = useState<LayoutType>("tiling");
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const autoPlayTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const supportsOrientation = activeLayout === "tiled" || activeLayout === "grid";
-
   useEffect(() => {
     if (isAutoPlaying) {
-      const layouts: LayoutType[] = ["tiled", "monocle", "grid", "floating"];
+      const layouts: LayoutType[] = ["tiling", "normie", "grid", "monocle", "tabbed"];
 
       autoPlayTimerRef.current = setInterval(() => {
         setActiveLayout((current) => {
@@ -27,7 +25,6 @@ export function OxwmLayouts() {
           const nextIndex = (currentIndex + 1) % layouts.length;
           return layouts[nextIndex];
         });
-        setOrientation("horizontal");
       }, 4000);
     } else {
       if (autoPlayTimerRef.current) {
@@ -48,38 +45,33 @@ export function OxwmLayouts() {
     setIsAutoPlaying(false);
   };
 
-  const handleOrientationChange = (newOrientation: typeof orientation) => {
-    setOrientation(newOrientation);
-    setIsAutoPlaying(false);
-  };
-
   return (
     <div className="mx-auto w-full max-w-4xl space-y-4 p-4">
       <div className="flex flex-col items-end gap-2 sm:flex-row sm:justify-end">
         <div className="inline-flex flex-wrap justify-end gap-1 rounded-2xl border border-fd-border bg-fd-muted p-1">
           <button
             type="button"
-            onClick={() => handleLayoutChange("tiled")}
+            onClick={() => handleLayoutChange("tiling")}
             className={cn(
               "cursor-pointer rounded-full px-4 py-1.5 font-medium text-sm transition-all",
-              activeLayout === "tiled"
+              activeLayout === "tiling"
                 ? "bg-fd-background text-fd-primary shadow-sm"
                 : "text-fd-muted-foreground hover:text-fd-foreground"
             )}
           >
-            Tiled
+            Tiling
           </button>
           <button
             type="button"
-            onClick={() => handleLayoutChange("monocle")}
+            onClick={() => handleLayoutChange("normie")}
             className={cn(
               "cursor-pointer rounded-full px-4 py-1.5 font-medium text-sm transition-all",
-              activeLayout === "monocle"
+              activeLayout === "normie"
                 ? "bg-fd-background text-fd-primary shadow-sm"
                 : "text-fd-muted-foreground hover:text-fd-foreground"
             )}
           >
-            Monocle
+            Normie
           </button>
           <button
             type="button"
@@ -95,56 +87,37 @@ export function OxwmLayouts() {
           </button>
           <button
             type="button"
-            onClick={() => handleLayoutChange("floating")}
+            onClick={() => handleLayoutChange("monocle")}
             className={cn(
               "cursor-pointer rounded-full px-4 py-1.5 font-medium text-sm transition-all",
-              activeLayout === "floating"
+              activeLayout === "monocle"
                 ? "bg-fd-background text-fd-primary shadow-sm"
                 : "text-fd-muted-foreground hover:text-fd-foreground"
             )}
           >
-            Floating
-          </button>
-        </div>
-
-        <div
-          className={cn(
-            "inline-flex rounded-full border border-fd-border bg-fd-muted p-1 transition-opacity",
-            !supportsOrientation ? "pointer-events-none opacity-50" : ""
-          )}
-        >
-          <button
-            type="button"
-            onClick={() => handleOrientationChange("horizontal")}
-            className={cn(
-              "cursor-pointer rounded-full px-4 py-1.5 font-medium text-sm transition-all",
-              orientation === "horizontal" && supportsOrientation
-                ? "bg-fd-background text-fd-primary shadow-sm"
-                : "text-fd-muted-foreground hover:text-fd-foreground"
-            )}
-          >
-            Horizontal
+            Monocle
           </button>
           <button
             type="button"
-            onClick={() => handleOrientationChange("vertical")}
+            onClick={() => handleLayoutChange("tabbed")}
             className={cn(
               "cursor-pointer rounded-full px-4 py-1.5 font-medium text-sm transition-all",
-              orientation === "vertical" && supportsOrientation
+              activeLayout === "tabbed"
                 ? "bg-fd-background text-fd-primary shadow-sm"
                 : "text-fd-muted-foreground hover:text-fd-foreground"
             )}
           >
-            Vertical
+            Tabbed
           </button>
         </div>
       </div>
 
       <div className="relative aspect-[3/2] w-full overflow-hidden rounded-xl border border-fd-border bg-fd-background/50 shadow-sm">
-        {activeLayout === "tiled" && <TileLayout orientation={orientation} />}
+        {activeLayout === "tiling" && <TileLayout />}
+        {activeLayout === "normie" && <FloatingLayout />}
+        {activeLayout === "grid" && <GridLayout />}
         {activeLayout === "monocle" && <MonocleLayout />}
-        {activeLayout === "grid" && <GridLayout orientation={orientation} />}
-        {activeLayout === "floating" && <FloatingLayout />}
+        {activeLayout === "tabbed" && <TabbedLayout />}
       </div>
     </div>
   );
