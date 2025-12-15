@@ -11,11 +11,11 @@ export function Hero() {
         {/* Left Column */}
         <div className="flex flex-1 flex-col items-center lg:items-start">
           <Image
-            src="/oxwm-white.svg"
+            src="/oxwm-color.svg"
             alt="OXWM Logo"
             width={300}
             height={300}
-            className="mb-8 size-64 opacity-60 sm:size-80 md:size-96"
+            className="mb-8 size-64 sm:size-80 md:size-96"
           />
 
           <p className="mb-8 max-w-xl text-balance text-center text-base text-fd-muted-foreground sm:text-lg md:text-xl lg:text-left">
