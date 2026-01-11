@@ -7,8 +7,9 @@ import { MonocleLayout } from "@/components/layouts/monocle-layout";
 import { GridLayout } from "@/components/layouts/grid-layout";
 import { FloatingLayout } from "@/components/layouts/floating-layout";
 import { TabbedLayout } from "@/components/layouts/tabbed-layout";
+import { ScrollingLayout } from "@/components/layouts/scrolling-layout";
 
-type LayoutType = "tiling" | "monocle" | "grid" | "normie" | "tabbed";
+type LayoutType = "tiling" | "monocle" | "grid" | "normie" | "tabbed" | "scrolling";
 
 export function OxwmLayouts() {
   const [activeLayout, setActiveLayout] = useState<LayoutType>("tiling");
@@ -17,7 +18,7 @@ export function OxwmLayouts() {
 
   useEffect(() => {
     if (isAutoPlaying) {
-      const layouts: LayoutType[] = ["tiling", "normie", "grid", "monocle", "tabbed"];
+      const layouts: LayoutType[] = ["tiling", "normie", "grid", "monocle", "tabbed", "scrolling"];
 
       autoPlayTimerRef.current = setInterval(() => {
         setActiveLayout((current) => {
@@ -109,6 +110,18 @@ export function OxwmLayouts() {
           >
             Tabbed
           </button>
+          <button
+            type="button"
+            onClick={() => handleLayoutChange("scrolling")}
+            className={cn(
+              "cursor-pointer rounded-full px-4 py-1.5 font-medium text-sm transition-all",
+              activeLayout === "scrolling"
+                ? "bg-fd-background text-fd-primary shadow-sm"
+                : "text-fd-muted-foreground hover:text-fd-foreground"
+            )}
+          >
+            Scrolling
+          </button>
         </div>
       </div>
 
@@ -118,6 +131,7 @@ export function OxwmLayouts() {
         {activeLayout === "grid" && <GridLayout />}
         {activeLayout === "monocle" && <MonocleLayout />}
         {activeLayout === "tabbed" && <TabbedLayout />}
+        {activeLayout === "scrolling" && <ScrollingLayout />}
       </div>
     </div>
   );

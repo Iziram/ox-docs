@@ -52,6 +52,18 @@ Windows in a tabbed container - tabs shown at the top.
 oxwm.key.bind({ "Mod4" }, "T", oxwm.layout.set("tabbed"))
 ```
 
+### Scrolling
+
+Windows arranged in a horizontal row that can be scrolled. A set number of windows are visible at once, and you can scroll through to see more.
+
+- Number of visible windows controlled by `num_master` (default: 2)
+- All windows have equal width based on visible count
+- Windows extend beyond the visible area and can be scrolled into view
+
+```lua
+oxwm.key.bind({ "Mod4" }, "S", oxwm.layout.set("scrolling"))
+```
+
 ## Cycling Layouts
 
 Cycle through all available layouts:
@@ -84,4 +96,5 @@ oxwm.set_layout_symbol("normie", "[F]")
 oxwm.set_layout_symbol("monocle", "[M]")
 oxwm.set_layout_symbol("grid", "[G]")
 oxwm.set_layout_symbol("tabbed", "[=]")
+oxwm.set_layout_symbol("scrolling", "[>>]")
 ```
