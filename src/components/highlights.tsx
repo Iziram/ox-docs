@@ -42,7 +42,7 @@ const highlights = [
     icon: Zap,
     title: "Lightweight",
     description:
-      "Written in Rust for speed and safety. Minimal resource usage while staying feature-rich.",
+      "Written in Zig for speed and safety. Minimal resource usage while staying feature-rich.",
   },
 ];
 

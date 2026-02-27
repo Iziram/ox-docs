@@ -77,8 +77,8 @@ If your distribution isn't listed, you can build OXWM from source.
 <Step>
 **Install dependencies**
 
-You'll need Rust, Cargo, and X11 development libraries:
-- `libx11`, `libxft`, `freetype2`, `fontconfig`, `pkg-config`
+You'll need Zig, Lua, and X11 development libraries:
+- `lua`, `libx11`, `libxft`, `freetype2`, `fontconfig`, `pkg-config`
 
 </Step>
 <Step>
@@ -87,21 +87,7 @@ You'll need Rust, Cargo, and X11 development libraries:
 ```sh
 git clone https://github.com/tonybanters/oxwm
 cd oxwm
-cargo build --release
-```
-
-</Step>
-<Step>
-**Install**
-
-```sh
-sudo cp target/release/oxwm /usr/local/bin/
-```
-
-Or use the justfile:
-
-```sh
-just install
+zig build -Doptimize=ReleaseSmall --prefix /usr
 ```
 
 </Step>

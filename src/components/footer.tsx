@@ -10,7 +10,7 @@ export function Footer() {
               <span className="font-bold text-fd-foreground text-xl">OXWM</span>
             </div>
             <p className="text-fd-muted-foreground text-sm">
-              A dynamic X11 window manager written in Rust, inspired by dwm.
+              A dynamic X11 window manager written in Zig, inspired by dwm.
             </p>
           </div>
 
@@ -126,7 +126,7 @@ export function Footer() {
             >
               dwm
             </a>
-            . Built with Rust.
+            . Built with Zig.
           </p>
         </div>
       </div>

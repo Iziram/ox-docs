@@ -19,7 +19,7 @@ export function Hero() {
           />
 
           <p className="mb-8 max-w-xl text-balance text-center text-base text-fd-muted-foreground sm:text-lg md:text-xl lg:text-left">
-            OXWM is a dynamic window manager written in Rust, inspired by dwm.
+            OXWM is a dynamic window manager written in Zig, inspired by dwm.
             Featuring a clean Lua API with hot-reload support, LSP autocomplete,
             and instant configuration changes without restarting X.
           </p>
