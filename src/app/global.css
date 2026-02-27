@@ -2,16 +2,16 @@
 @import 'fumadocs-ui/css/catppuccin.css';
 @import 'fumadocs-ui/css/preset.css';
 
-/* OXWM theme - orange and dark brown/black */
+/* OXWM theme - golden yellow and black (matching logo) */
 :root.dark, .dark {
-  --color-fd-primary: #f96a1c;
-  --color-fd-primary-foreground: #1a1a1a;
-  --color-fd-background: #1a1a1a;
-  --color-fd-popover: #141414;
-  --color-fd-card: #1f1f1f;
-  --color-fd-muted: #1f1f1f;
-  --color-fd-border: #333333;
-  --color-fd-accent: #2a2a2a;
-  --color-fd-secondary: #1f1f1f;
+  --color-fd-primary: #f6a41c;
+  --color-fd-primary-foreground: #121212;
+  --color-fd-background: #121212;
+  --color-fd-popover: #0a0a0a;
+  --color-fd-card: #1a1a1a;
+  --color-fd-muted: #1a1a1a;
+  --color-fd-border: #2a2a2a;
+  --color-fd-accent: #1f1f1f;
+  --color-fd-secondary: #1a1a1a;
 }
 

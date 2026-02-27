@@ -46,7 +46,7 @@ export function Hero() {
         {/* Right Column */}
         <div className="flex flex-1 flex-col items-center lg:items-start">
           <h1 className="mb-8 text-balance text-center font-bold text-4xl text-fd-foreground leading-tight sm:text-5xl md:text-6xl lg:text-left lg:text-7xl">
-            Functional, <span className="text-fd-primary">Oxidized</span>
+            Functional, <span className="text-fd-primary">Optimized</span>
           </h1>
 
           <OxwmLayouts />
